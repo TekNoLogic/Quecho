@@ -1,0 +1,10 @@
+## Interface: 20003
+
+## Title: Quecho
+## Notes: Echos quest objective completion to your party
+## Author: Tekkub Stoutwrithe
+## X-Category: Quest
+
+## OptionalDeps: Dongle
+
+Quecho.lua
