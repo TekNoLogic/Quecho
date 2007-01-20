@@ -63,7 +63,7 @@ end
 function Quecho:CHAT_MSG_ADDON(prefix, msg, channel, sender)
 	if prefix ~= "Quecho" then return end
 --~~ 	if sender == myname then return end
-	self:Debug(sender, msg)
+	self:Debug(1, sender, msg)
 	self:Print(sender, msg)
 
 --~ 	sendtimes[sender..msg] = GetTime()
