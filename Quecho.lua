@@ -48,21 +48,23 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function Quecho:UI_INFO_MESSAGE(msg)
+function Quecho:UI_INFO_MESSAGE(event, msg)
 --~ 	if not msg or GetNumPartyMembers() == 0 then return end
 	if not msg then return end
 
-	local subtxt = gsub(msg, "(.*): %d+%s*/%s*%d+","%1", 1)
+	local subtxt = gsub(msg, "(.*):%s*([-%d]+)%s*/%s*([-%d]+)%s*$", "%1", 1)
+--~ 	local subtxt = gsub(msg, "(.*): %d+%s*/%s*%d+","%1", 1)
 	if subtxt == msg then return end
 
 	SendAddonMessage("Quecho", msg, "PARTY")
+--~ 	if GetNumPartyMembers() == 0 then self:CHAT_MSG_ADDON("Quecho", msg, "PARTY", myname) end
 	if partychat then SendChatMessage(msg, "PARTY") end
 end
 
 
-function Quecho:CHAT_MSG_ADDON(prefix, msg, channel, sender)
+function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if prefix ~= "Quecho" then return end
---~~ 	if sender == myname then return end
+ 	if sender == myname then return end
 	self:Debug(1, sender, msg)
 	self:Print(sender, msg)
 
