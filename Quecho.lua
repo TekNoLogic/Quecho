@@ -14,7 +14,7 @@ local partychat = false
 --      Namespace Declaration      --
 -------------------------------------
 
-Quecho = DongleStub("Dongle-Beta0"):New("Quecho")
+Quecho = DongleStub("Dongle-Beta1"):New("Quecho")
 
 
 ---------------------------
