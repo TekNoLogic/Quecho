@@ -3,7 +3,7 @@
 --      Are you local?      --
 ------------------------------
 
-local tablet = AceLibrary("Tablet-2.0")
+--~ local tablet = AceLibrary("Tablet-2.0")
 local myname = UnitName("player")
 local quests, lastsend, sendtimes, delayedval = {}, {}, {}
 
@@ -31,17 +31,17 @@ end
 --      FuBar Methods      --
 -----------------------------
 
-function Quecho:OnTooltipUpdate()
-	for sender,quests in pairs(quests) do
-		local cat = tablet:AddCategory("text", sender)
-		for idx,items in pairs(quests) do
-			cat:AddLine("text", idx)
-			for _,item in ipairs(items) do
-				cat:AddLine("text", item)
-			end
-		end
-	end
-end
+--~ function Quecho:OnTooltipUpdate()
+--~ 	for sender,quests in pairs(quests) do
+--~ 		local cat = tablet:AddCategory("text", sender)
+--~ 		for idx,items in pairs(quests) do
+--~ 			cat:AddLine("text", idx)
+--~ 			for _,item in ipairs(items) do
+--~ 				cat:AddLine("text", item)
+--~ 			end
+--~ 		end
+--~ 	end
+--~ end
 
 
 ------------------------------
