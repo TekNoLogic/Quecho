@@ -8,4 +8,6 @@
 
 ## OptionalDeps: Dongle
 
+Dongle.lua
+
 Quecho.lua
