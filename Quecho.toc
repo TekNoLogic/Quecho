@@ -8,6 +8,9 @@
 
 ## OptionalDeps: Dongle
 
+## LoadManagers: AddonLoader
+## X-LoadOn-Group: true
+
 Dongle.lua
 
 Quecho.lua
