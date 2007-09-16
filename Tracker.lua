@@ -35,3 +35,8 @@ function Quecho:UpdateTracker()
 end
 
 
+local orig = QuestWatchFrame.Hide
+local function posthook(frame, ...) frame:SetWidth(1); return ... end
+QuestWatchFrame.Hide = function(frame, ...) return posthook(frame, orig(frame, ...)) end
+
+if GetNumQuestWatches() == 0 then QuestWatchFrame:SetWidth(1) end
