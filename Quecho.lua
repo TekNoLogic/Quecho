@@ -3,10 +3,7 @@
 --      Are you local?      --
 ------------------------------
 
---~ local tablet = AceLibrary("Tablet-2.0")
 local myname = UnitName("player")
-local quests, lastsend, sendtimes, delayedval = {}, {}, {}
-
 local partychat = false
 
 
@@ -17,9 +14,14 @@ local partychat = false
 Quecho = DongleStub("Dongle-1.0"):New("Quecho")
 
 
-------------------------------
---      Dongle Methods      --
-------------------------------
+function Quecho:Initialize()
+	self.quests = setmetatable({}, {__index = function (t,i)
+		local v = {}
+		rawset(t, i, v)
+		return v
+	end})
+end
+
 
 function Quecho:Enable()
 	self:RegisterEvent("UI_INFO_MESSAGE")
@@ -28,21 +30,35 @@ function Quecho:Enable()
 end
 
 
------------------------------
---      FuBar Methods      --
------------------------------
+---------------------------
+--      Reset timer      --
+---------------------------
 
---~ function Quecho:OnTooltipUpdate()
---~ 	for sender,quests in pairs(quests) do
---~ 		local cat = tablet:AddCategory("text", sender)
---~ 		for idx,items in pairs(quests) do
---~ 			cat:AddLine("text", idx)
---~ 			for _,item in ipairs(items) do
---~ 				cat:AddLine("text", item)
---~ 			end
---~ 		end
---~ 	end
---~ end
+local DELAY = 60 * 5
+local sendtimes, nextpurge = {}
+local f = CreateFrame("Frame")
+local function OnUpdate(f)
+	if not nextpurge then f:SetScript("OnUpdate", nil) end
+
+	local now = GetTime()
+	if now >= (nextpurge + DELAY) then
+		local next2
+		for sender,objectives in pairs(Quecho.quests) do
+			for objective in pairs(objectives) do
+				local t = sendtimes[sender..objective]
+				if (t + DELAY) <= now then
+					Quecho:Debug(1, "Purging", sender..objective)
+					sendtimes[sender..objective] = nil
+					Quecho.quests[sender][objective] = nil
+				elseif not next2 or t < next2 then next2 = t end
+			end
+		end
+
+		Quecho:UpdateTracker()
+		if not next2 then f:SetScript("OnUpdate", nil) end
+		nextpurge = next2
+	end
+end
 
 
 ------------------------------
@@ -50,15 +66,11 @@ end
 ------------------------------
 
 function Quecho:UI_INFO_MESSAGE(event, msg)
---~ 	if not msg or GetNumPartyMembers() == 0 then return end
 	if not msg then return end
 
-	local subtxt = gsub(msg, "(.*):%s*([-%d]+)%s*/%s*([-%d]+)%s*$", "%1", 1)
---~ 	local subtxt = gsub(msg, "(.*): %d+%s*/%s*%d+","%1", 1)
-	if subtxt == msg then return end
+	if not msg:find("(.+): (%d+/%d+)") then return end
 
 	SendAddonMessage("Quecho", msg, "PARTY")
---~ 	if GetNumPartyMembers() == 0 then self:CHAT_MSG_ADDON("Quecho", msg, "PARTY", myname) end
 	if partychat then SendChatMessage(msg, "PARTY") end
 end
 
@@ -66,22 +78,18 @@ end
 function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if sender == myname then return end
 	if prefix == "Quecho" then
-		self:Debug(1, sender, msg)
-		self:Print(sender, msg)
+		local _, _, objective, progress = msg:find("(.+): (%d+/%d+)")
+		self:Debug(1, sender, msg, objective, progress)
 
-	--~ 	sendtimes[sender..msg] = GetTime()
-	--~ 	self:ScheduleEvent("Quecho_CheckTimes", 302)
-	--~ 	lastsend[sender] = msg
-	--~ 	if not quests[sender] then quests[sender] = {} end
-	--~ 	if not quests[sender][msg] then quests[sender][msg] = {}
-	--~ 	else
-	--~ 		for i in pairs(quests[sender][msg]) do quests[sender][msg][i] = nil end
-	--~ 		quests[sender][msg].reset = 1
-	--~ 		quests[sender][msg].reset = nil
-	--~ 		table.setn(quests[sender][msg], 0)
-	--~ 	end
+		sendtimes[sender..objective] = GetTime()
+		if not nextpurge then
+			nextpurge = GetTime()
+			f:SetScript("OnUpdate", OnUpdate)
+		end
+		self.quests[sender][objective] = progress
 
-	--~ 	self:Update()
+		self:UpdateTracker()
+
 	elseif prefix == "Quecho2" then
 		self:Print(sender, "Quest turned in: "..msg)
 	elseif prefix == "Quecho3" then
@@ -90,26 +98,9 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 end
 
 
-function Quecho:Quecho_CheckTimes()
-	local changed
-
-	for sender,quests in pairs(quests) do
-		for quest in pairs(quests) do
-			if sendtimes[sender..quest] < (GetTime() - 300) then
-				quests[sender][quest] = nil
-				sendtimes[sender..quest] = nil
-				changed = true
-			end
-		end
-	end
-
-	if changed then self:Update() end
-end
-
-
 function Quecho:CHAT_MSG_SYSTEM(event, msg)
 	local _, _, text = msg:find("Quest accepted: (.*)")
-	if text then SendAddonMessage("Quecho3", text, "PARTY")
+	if text then SendAddonMessage("Quecho3", text, "PARTY") end
 end
 
 
@@ -119,3 +110,4 @@ GetQuestReward = function(...)
 
 	return orig(...)
 end
+
