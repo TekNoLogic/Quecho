@@ -17,13 +17,14 @@ local partychat = false
 Quecho = DongleStub("Dongle-1.0"):New("Quecho")
 
 
----------------------------
---      Ace Methods      --
----------------------------
+------------------------------
+--      Dongle Methods      --
+------------------------------
 
 function Quecho:Enable()
 	self:RegisterEvent("UI_INFO_MESSAGE")
 	self:RegisterEvent("CHAT_MSG_ADDON")
+	self:RegisterEvent("CHAT_MSG_SYSTEM")
 end
 
 
@@ -63,24 +64,29 @@ end
 
 
 function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
-	if prefix ~= "Quecho" then return end
- 	if sender == myname then return end
-	self:Debug(1, sender, msg)
-	self:Print(sender, msg)
+	if sender == myname then return end
+	if prefix == "Quecho" then
+		self:Debug(1, sender, msg)
+		self:Print(sender, msg)
 
---~ 	sendtimes[sender..msg] = GetTime()
---~ 	self:ScheduleEvent("Quecho_CheckTimes", 302)
---~ 	lastsend[sender] = msg
---~ 	if not quests[sender] then quests[sender] = {} end
---~ 	if not quests[sender][msg] then quests[sender][msg] = {}
---~ 	else
---~ 		for i in pairs(quests[sender][msg]) do quests[sender][msg][i] = nil end
---~ 		quests[sender][msg].reset = 1
---~ 		quests[sender][msg].reset = nil
---~ 		table.setn(quests[sender][msg], 0)
---~ 	end
+	--~ 	sendtimes[sender..msg] = GetTime()
+	--~ 	self:ScheduleEvent("Quecho_CheckTimes", 302)
+	--~ 	lastsend[sender] = msg
+	--~ 	if not quests[sender] then quests[sender] = {} end
+	--~ 	if not quests[sender][msg] then quests[sender][msg] = {}
+	--~ 	else
+	--~ 		for i in pairs(quests[sender][msg]) do quests[sender][msg][i] = nil end
+	--~ 		quests[sender][msg].reset = 1
+	--~ 		quests[sender][msg].reset = nil
+	--~ 		table.setn(quests[sender][msg], 0)
+	--~ 	end
 
---~ 	self:Update()
+	--~ 	self:Update()
+	elseif prefix == "Quecho2" then
+		self:Print(sender, "Quest turned in: "..msg)
+	elseif prefix == "Quecho3" then
+		self:Print(sender, "Quest accepted: "..msg)
+	end
 end
 
 
@@ -100,3 +106,16 @@ function Quecho:Quecho_CheckTimes()
 	if changed then self:Update() end
 end
 
+
+function Quecho:CHAT_MSG_SYSTEM(event, msg)
+	local _, _, text = msg:find("Quest accepted: (.*)")
+	if text then SendAddonMessage("Quecho3", text, "PARTY")
+end
+
+
+local orig = GetQuestReward
+GetQuestReward = function(...)
+	SendAddonMessage("Quecho2", GetTitleText(), "PARTY")
+
+	return orig(...)
+end
