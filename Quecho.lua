@@ -18,7 +18,8 @@ end
 function Quecho:Enable()
 	self:RegisterEvent("UI_INFO_MESSAGE")
 	self:RegisterEvent("CHAT_MSG_ADDON")
-	self:RegisterEvent("CHAT_MSG_SYSTEM")
+	self:RegisterEvent("QUEST_LOG_UPDATE")
+	self:QUEST_LOG_UPDATE()
 end
 
 
@@ -80,21 +81,37 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 
 		self:UpdateTracker()
 
-	elseif prefix == "Quecho2" then self:PrintF("%s turned in %q ", sender, msg)
-	elseif prefix == "Quecho3" then self:PrintF("%s accepted %q ", sender, msg) end
+	elseif prefix == "Quecho2" then self:PrintF("%s turned in %s ", sender, msg)
+	elseif prefix == "Quecho3" then self:PrintF("%s accepted %s ", sender, msg)
+	elseif prefix == "Quecho4" then self:PrintF("%s abandoned %s ", sender, msg) end
 end
 
 
-function Quecho:CHAT_MSG_SYSTEM(event, msg)
-	local _, _, text = msg:find("Quest accepted: (.*)")
-	if text then SendAddonMessage("Quecho3", text, "PARTY") end
+local currentquests, oldquests, firstscan, abandoning = {}, {}, true
+function Quecho:QUEST_LOG_UPDATE()
+	currentquests, oldquests = oldquests, currentquests
+	for i in pairs(currentquests) do currentquests[i] = nil end
+
+	for i=1,GetNumQuestLogEntries() do
+		local link = GetQuestLink(i)
+		if link then currentquests[link] = true end
+	end
+
+	if firstscan then
+		firstscan = nil
+		return
+	end
+
+	for link in pairs(oldquests) do if not currentquests[link] then SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY") end end
+	for link in pairs(currentquests) do if not oldquests[link] then SendAddonMessage("Quecho3", link, "PARTY") end end
+
+	abandoning = nil
 end
 
 
-local orig = GetQuestReward
-GetQuestReward = function(...)
-	SendAddonMessage("Quecho2", GetTitleText(), "PARTY")
-
+local orig = AbandonQuest
+function AbandonQuest(...)
+	abandoning = true
 	return orig(...)
 end
 
