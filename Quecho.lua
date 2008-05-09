@@ -3,24 +3,36 @@
 --      Namespace Declaration      --
 -------------------------------------
 
-Quecho = DongleStub("Dongle-1.0"):New("Quecho")
+Quecho = {}
 
 
-function Quecho:Initialize()
-	self.quests = setmetatable({}, {__index = function (t,i)
-		local v = {}
-		rawset(t, i, v)
-		return v
-	end})
-end
+Quecho.quests = setmetatable({}, {__index = function (t,i)
+	local v = {}
+	rawset(t, i, v)
+	return v
+end})
 
 
-function Quecho:Enable()
-	self:RegisterEvent("UI_INFO_MESSAGE")
-	self:RegisterEvent("CHAT_MSG_ADDON")
-	self:RegisterEvent("QUEST_LOG_UPDATE")
+local f = CreateFrame("Frame")
+f:SetScript("OnEvent", function(frame, event, ...) if Quecho[event] then return Quecho[event](Quecho, event, ...) end end)
+f:RegisterEvent("ADDON_LOADED")
+
+
+function Quecho:ADDON_LOADED(event, addon)
+	if addon ~= "Quecho" then return end
+
 	self:QUEST_LOG_UPDATE()
+
+	f:RegisterEvent("UI_INFO_MESSAGE")
+	f:RegisterEvent("CHAT_MSG_ADDON")
+	f:RegisterEvent("QUEST_LOG_UPDATE")
+
+	f:UnregisterEvent("ADDON_LOADED")
+	self.ADDON_LOADED = nil
 end
+
+
+function Quecho:PrintF(...) ChatFrame1:AddMessage(string.format(...)) end
 
 
 ---------------------------
@@ -29,7 +41,6 @@ end
 
 local DELAY = 60 * 5
 local sendtimes, nextpurge = {}
-local f = CreateFrame("Frame")
 local function OnUpdate(f)
 	if not nextpurge then f:SetScript("OnUpdate", nil) end
 
@@ -40,7 +51,6 @@ local function OnUpdate(f)
 			for objective in pairs(objectives) do
 				local t = sendtimes[sender..objective]
 				if (t + DELAY) <= now then
-					Quecho:Debug(1, "Purging", sender..objective)
 					sendtimes[sender..objective] = nil
 					Quecho.quests[sender][objective] = nil
 				elseif not next2 or t < next2 then next2 = t end
@@ -70,7 +80,6 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 
 	if prefix == "Quecho" then
 		local _, _, objective, progress = msg:find("(.+): (%d+/%d+)")
-		self:Debug(1, sender, msg, objective, progress)
 
 		sendtimes[sender..objective] = GetTime()
 		if not nextpurge then

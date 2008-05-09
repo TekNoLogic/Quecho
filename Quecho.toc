@@ -6,12 +6,8 @@
 ## Version: Alpha
 ## X-Category: Quest
 
-## OptionalDeps: Dongle
-
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Group: true
-
-Dongle.lua
 
 Quecho.lua
 Tracker.lua
