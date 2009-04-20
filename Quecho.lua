@@ -57,7 +57,7 @@ local function OnUpdate(f)
 			end
 		end
 
-		Quecho:UpdateTracker()
+		WatchFrame_Update()
 		if not next2 then f:SetScript("OnUpdate", nil) end
 		nextpurge = next2
 	end
@@ -88,7 +88,7 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		end
 		self.quests[sender][objective] = progress
 
-		self:UpdateTracker()
+		WatchFrame_Update()
 
 	elseif prefix == "Quecho2" then self:PrintF("%s turned in %s ", sender, msg)
 	elseif prefix == "Quecho3" then self:PrintF("%s accepted %s ", sender, msg)
