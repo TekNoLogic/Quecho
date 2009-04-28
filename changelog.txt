@@ -1,0 +1,4 @@
+3.1.0.2-Beta
+    Also match "complete" notes
+    Add support for new improved tracker frame
+
