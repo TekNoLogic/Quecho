@@ -69,7 +69,7 @@ end
 ------------------------------
 
 function Quecho:UI_INFO_MESSAGE(event, msg)
-	if not msg or not msg:find("(.+): (%d+/%d+)") then return end
+	if not msg or not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then return end
 	SendAddonMessage("Quecho", msg, "PARTY")
 end
 
@@ -79,7 +79,7 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if sender == myname then return end
 
 	if prefix == "Quecho" then
-		local _, _, objective, progress = msg:find("(.+): (%d+/%d+)")
+		local _, _, objective, progress = msg:find("([^:]+):? %(?([^)]+)%)?")
 
 		sendtimes[sender..objective] = GetTime()
 		if not nextpurge then
