@@ -1,4 +1,6 @@
 
+local myname, Quecho = ...
+
 
 local f = CreateFrame("Frame", nil, UIParent)
 f:SetWidth(1) f:SetHeight(1)

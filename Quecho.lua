@@ -1,9 +1,5 @@
 
--------------------------------------
---      Namespace Declaration      --
--------------------------------------
-
-Quecho = {}
+local myname, Quecho = ...
 
 
 Quecho.quests = setmetatable({}, {__index = function (t,i)
@@ -19,7 +15,7 @@ f:RegisterEvent("ADDON_LOADED")
 
 
 function Quecho:ADDON_LOADED(event, addon)
-	if addon ~= "Quecho" then return end
+	if addon ~= myname then return end
 
 	self:QUEST_LOG_UPDATE()
 
@@ -32,7 +28,7 @@ function Quecho:ADDON_LOADED(event, addon)
 end
 
 
-function Quecho:PrintF(...) ChatFrame1:AddMessage(string.format(...)) end
+local function PrintF(...) print(string.format(...)) end
 
 
 ---------------------------
@@ -90,9 +86,9 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 
 		WatchFrame_Update()
 
-	elseif prefix == "Quecho2" then self:PrintF("%s turned in %s ", sender, msg)
-	elseif prefix == "Quecho3" then self:PrintF("%s accepted %s ", sender, msg)
-	elseif prefix == "Quecho4" then self:PrintF("%s abandoned %s ", sender, msg) end
+	elseif prefix == "Quecho2" then PrintF("%s turned in %s ", sender, msg)
+	elseif prefix == "Quecho3" then PrintF("%s accepted %s ", sender, msg)
+	elseif prefix == "Quecho4" then PrintF("%s abandoned %s ", sender, msg) end
 end
 
 
