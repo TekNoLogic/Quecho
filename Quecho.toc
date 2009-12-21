@@ -9,5 +9,7 @@
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Group: true
 
+QIDmemo.lua
+
 Quecho.lua
 Tracker.lua

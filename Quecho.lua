@@ -95,11 +95,11 @@ end
 local currentquests, oldquests, firstscan, abandoning = {}, {}, true
 function Quecho:QUEST_LOG_UPDATE()
 	currentquests, oldquests = oldquests, currentquests
-	for i in pairs(currentquests) do currentquests[i] = nil end
+	wipe(currentquests)
 
 	for i=1,GetNumQuestLogEntries() do
 		local link = GetQuestLink(i)
-		if link then currentquests[link] = true end
+		if link then currentquests[self.qids[link]] = link end
 	end
 
 	if firstscan then
@@ -107,8 +107,8 @@ function Quecho:QUEST_LOG_UPDATE()
 		return
 	end
 
-	for link in pairs(oldquests) do if not currentquests[link] then SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY") end end
-	for link in pairs(currentquests) do if not oldquests[link] then SendAddonMessage("Quecho3", link, "PARTY") end end
+	for id,link in pairs(oldquests) do if not currentquests[id] then SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY") end end
+	for id,link in pairs(currentquests) do if not oldquests[id] then SendAddonMessage("Quecho3", link, "PARTY") end end
 
 	abandoning = nil
 end
