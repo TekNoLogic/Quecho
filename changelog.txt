@@ -1,3 +1,6 @@
+3.3.0.3-Release
+    Track by QID instead of link, since the link changes with level
+
 3.1.0.2-Beta
     Also match "complete" notes
     Add support for new improved tracker frame
