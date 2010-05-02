@@ -1,3 +1,6 @@
+3.3.0.4-Beta
+    Ah undocumented changes to the API!
+
 3.3.0.3-Release
     Track by QID instead of link, since the link changes with level
 
