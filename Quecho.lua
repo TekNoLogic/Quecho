@@ -120,3 +120,9 @@ function AbandonQuest(...)
 	return orig(...)
 end
 
+
+-- /run LoadAddOn("Quecho"); Quecho_DebugComm()
+-- function Quecho_DebugComm()
+-- 	Quecho:CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
+-- 	Quecho:CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
+-- end
