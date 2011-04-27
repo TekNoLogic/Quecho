@@ -19,10 +19,10 @@ function Quecho:ADDON_LOADED(event, addon)
 
 	self:QUEST_LOG_UPDATE()
 
-	f:RegisterAddonMessagePrefix("Quecho")
-	f:RegisterAddonMessagePrefix("Quecho2")
-	f:RegisterAddonMessagePrefix("Quecho3")
-	f:RegisterAddonMessagePrefix("Quecho4")
+	RegisterAddonMessagePrefix("Quecho")
+	RegisterAddonMessagePrefix("Quecho2")
+	RegisterAddonMessagePrefix("Quecho3")
+	RegisterAddonMessagePrefix("Quecho4")
 
 	f:RegisterEvent("UI_INFO_MESSAGE")
 	f:RegisterEvent("CHAT_MSG_ADDON")
