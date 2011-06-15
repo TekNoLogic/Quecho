@@ -1,4 +1,3 @@
-
 local myname, Quecho = ...
 
 
@@ -101,10 +100,17 @@ local currentquests, oldquests, firstscan, abandoning = {}, {}, true
 function Quecho:QUEST_LOG_UPDATE()
 	currentquests, oldquests = oldquests, currentquests
 	wipe(currentquests)
+        
+        local i, count = 0, 0
+        local _, total = GetNumQuestLogEntries()
 
-	for i=1,GetNumQuestLogEntries() do
+	while count < total do
+                i = i + 1
 		local link = GetQuestLink(i)
-		if link then currentquests[self.qids[link]] = link end
+		if link then
+                        count = count + 1
+                        currentquests[self.qids[link]] = link
+                end
 	end
 
 	if firstscan then
