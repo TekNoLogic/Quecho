@@ -1,4 +1,3 @@
-
 local myname, Quecho = ...
 
 
@@ -36,5 +35,5 @@ WatchFrame_AddObjectiveHandler(function(lineFrame, nextAnchor, maxHeight, frameW
 		end
 	end
 
-	return lastLine or nextAnchor, maxWidth, numQuestWatches
+	return lastLine or nextAnchor, maxWidth, numQuestWatches, 0
 end)
