@@ -1,3 +1,6 @@
+5.0.1.8-Beta
+    Fix for 5.0 (thanks kccricket)
+
 4.2.0.7-Beta
     Make better use of GetNumQuestLogEntries() to avoid issues when quest log headers are expanded/collapsed
 
