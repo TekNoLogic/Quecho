@@ -31,7 +31,7 @@ WatchFrame_AddObjectiveHandler(function(lineFrame, nextAnchor, maxHeight, frameW
 	for sender,values in pairs(Quecho.quests) do
 		if next(values)then
 			maxWidth, lastLine, numQuestWatches = AddLine(sender, maxWidth, lineFrame, lastLine or nextAnchor, true, numQuestWatches)
-			for i,v in pairs(values) do maxWidth, lastLine = AddLine(" - "..i..": "..v, maxWidth, lineFrame, lastLine, false, numQuestWatches, 0.8, 0.8, 0.8) end
+			for i,v in pairs(values) do maxWidth, lastLine = AddLine(" - "..i..": "..v, maxWidth, lineFrame, lastLine, false, numQuestWatches, 0.7, 0.7, 0.9) end
 		end
 	end
 
