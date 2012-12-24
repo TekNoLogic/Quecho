@@ -1,3 +1,11 @@
+5.1.0.11-Release
+    Tagging release version
+commit eec9a5e2fb58b43e80df79013ffcdb405f0facc3
+Author: tekkub :bear:  <tekkub@gmail.com>
+Date:   Mon Dec 24 02:01:55 2012 -0700
+
+    Updating TOC to 50100
+
 5.0.1.10-Beta
     Tweak the tracker color a smidge
 
