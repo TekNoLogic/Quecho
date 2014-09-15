@@ -97,7 +97,8 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		end
 		self.quests[sender][objective] = progress
 
-		WatchFrame_Update()
+		if ns.isWOD then Quecho.Update()
+		else WatchFrame_Update() end
 
 	elseif prefix == "Quecho2" then PrintF("%s turned in %s ", sender, msg)
 	elseif prefix == "Quecho3" then PrintF("%s accepted %s ", sender, msg)

@@ -9,6 +9,8 @@
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Group: true
 
+externals\wod.lua
+
 QIDmemo.lua
 
 Quecho.lua
