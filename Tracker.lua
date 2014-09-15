@@ -1,5 +1,5 @@
-local myname, Quecho = ...
 
+local myname, ns = ...
 
 local f = CreateFrame("Frame", nil, UIParent)
 f:SetWidth(1) f:SetHeight(1)
@@ -32,7 +32,7 @@ local function AddQuests(lineFrame, nextAnchor, maxHeight, frameWidth)
 	current = 0
 	for _,fs in ipairs(lines) do fs:SetText() end
 
-	for sender,values in pairs(Quecho.quests) do
+	for sender,values in pairs(ns.quests) do
 		if next(values) then
 			maxWidth, lastLine, numQuestWatches = AddLine(sender, maxWidth, lineFrame, lastLine or nextAnchor, true, numQuestWatches)
 			for i,v in pairs(values) do
