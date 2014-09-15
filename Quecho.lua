@@ -31,28 +31,22 @@ end
 ---------------------------
 
 local DELAY = 60 * 5
-local sendtimes, nextpurge = {}
-local function OnUpdate(f)
-	if not nextpurge then f:SetScript("OnUpdate", nil) end
-
-	local now = GetTime()
-	if now >= (nextpurge + DELAY) then
-		local next2
-		for sender,objectives in pairs(ns.quests) do
-			for objective in pairs(objectives) do
-				local t = sendtimes[sender..objective]
-				if (t + DELAY) <= now then
-					sendtimes[sender..objective] = nil
-					ns.quests[sender][objective] = nil
-				elseif not next2 or t < next2 then next2 = t end
+local sendtimes = {}
+local function ExpireObjectives()
+	local cutoff = GetTime() - DELAY
+	local dirty
+	for sender,objectives in pairs(ns.quests) do
+		for objective in pairs(objectives) do
+			if sendtimes[sender..objective] <= cutoff then
+				sendtimes[sender..objective] = nil
+				ns.quests[sender][objective] = nil
+				dirty = true
 			end
 		end
-
-		if ns.isWOD then ns.Update()
-		else WatchFrame_Update() end
-		if not next2 then f:SetScript("OnUpdate", nil) end
-		nextpurge = next2
 	end
+
+	if ns.isWOD and dirty then ns.Update()
+	elseif dirty then WatchFrame_Update() end
 end
 
 
@@ -77,11 +71,10 @@ function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if prefix == "Quecho" then
 		local _, _, objective, progress = msg:find("([^:]+):? %(?([^)]+)%)?")
 
-		sendtimes[sender..objective] = GetTime()
-		if not nextpurge then
-			nextpurge = GetTime()
-			f:SetScript("OnUpdate", OnUpdate)
-		end
+		local now = GetTime()
+		sendtimes[sender..objective] = now
+		ns.StartTimer(now + DELAY + 0.1, ExpireObjectives)
+
 		ns.quests[sender][objective] = progress
 
 		if ns.isWOD then ns.Update()

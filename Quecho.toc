@@ -11,6 +11,7 @@
 
 externals\events.lua
 externals\print.lua
+externals\timer.lua
 externals\wod.lua
 
 QIDmemo.lua
