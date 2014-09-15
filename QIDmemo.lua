@@ -1,7 +1,7 @@
 
-local myname, Quecho = ...
+local myname, ns = ...
 
-Quecho.qids = setmetatable({}, {
+ns.qids = setmetatable({}, {
 	__index = function(t,i)
 		local v = tonumber(i:match("|Hquest:(%d+):"))
 		t[i] = v
