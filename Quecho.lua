@@ -1,8 +1,8 @@
 
-local myname, Quecho = ...
+local myname, ns = ...
 
 
-Quecho.quests = setmetatable({}, {__index = function (t,i)
+ns.quests = setmetatable({}, {__index = function (t,i)
 	local v = {}
 	rawset(t, i, v)
 	return v
@@ -11,14 +11,14 @@ end})
 
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function(frame, event, ...)
-	if Quecho[event] then
-		return Quecho[event](Quecho, event, ...)
+	if ns[event] then
+		return ns[event](ns, event, ...)
 	end
 end)
 f:RegisterEvent("ADDON_LOADED")
 
 
-function Quecho:ADDON_LOADED(event, addon)
+function ns:ADDON_LOADED(event, addon)
 	if addon ~= myname then return end
 
 	self:QUEST_LOG_UPDATE()
@@ -52,17 +52,17 @@ local function OnUpdate(f)
 	local now = GetTime()
 	if now >= (nextpurge + DELAY) then
 		local next2
-		for sender,objectives in pairs(Quecho.quests) do
+		for sender,objectives in pairs(ns.quests) do
 			for objective in pairs(objectives) do
 				local t = sendtimes[sender..objective]
 				if (t + DELAY) <= now then
 					sendtimes[sender..objective] = nil
-					Quecho.quests[sender][objective] = nil
+					ns.quests[sender][objective] = nil
 				elseif not next2 or t < next2 then next2 = t end
 			end
 		end
 
-		if ns.isWOD then Quecho.Update()
+		if ns.isWOD then ns.Update()
 		else WatchFrame_Update() end
 		if not next2 then f:SetScript("OnUpdate", nil) end
 		nextpurge = next2
@@ -74,7 +74,7 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function Quecho:UI_INFO_MESSAGE(event, msg)
+function ns:UI_INFO_MESSAGE(event, msg)
 	if not msg then return end
 	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
 		return
@@ -85,7 +85,7 @@ end
 
 
 local myname = UnitName("player")
-function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
+function ns:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if sender == myname then return end
 
 	if prefix == "Quecho" then
@@ -98,7 +98,7 @@ function Quecho:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		end
 		self.quests[sender][objective] = progress
 
-		if ns.isWOD then Quecho.Update()
+		if ns.isWOD then ns.Update()
 		else WatchFrame_Update() end
 
 	elseif prefix == "Quecho2" then PrintF("%s turned in %s ", sender, msg)
@@ -108,7 +108,7 @@ end
 
 
 local currentquests, oldquests, firstscan, abandoning = {}, {}, true
-function Quecho:QUEST_LOG_UPDATE()
+function ns:QUEST_LOG_UPDATE()
 	currentquests, oldquests = oldquests, currentquests
 	wipe(currentquests)
 
@@ -149,6 +149,6 @@ end
 
 -- /run LoadAddOn("Quecho"); Quecho_DebugComm()
 -- function Quecho_DebugComm()
--- 	Quecho:CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
--- 	Quecho:CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
+-- 	ns:CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
+-- 	ns:CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
 -- end
