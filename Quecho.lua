@@ -26,9 +26,6 @@ function ns.OnLoad()
 end
 
 
-local function PrintF(...) print(string.format(...)) end
-
-
 ---------------------------
 --      Reset timer      --
 ---------------------------
@@ -90,9 +87,9 @@ function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		if ns.isWOD then ns.Update()
 		else WatchFrame_Update() end
 
-	elseif prefix == "Quecho2" then PrintF("%s turned in %s ", sender, msg)
-	elseif prefix == "Quecho3" then PrintF("%s accepted %s ", sender, msg)
-	elseif prefix == "Quecho4" then PrintF("%s abandoned %s ", sender, msg) end
+	elseif prefix == "Quecho2" then ns.Printf("%s turned in %s ", sender, msg)
+	elseif prefix == "Quecho3" then ns.Printf("%s accepted %s ", sender, msg)
+	elseif prefix == "Quecho4" then ns.Printf("%s abandoned %s ", sender, msg) end
 end
 
 

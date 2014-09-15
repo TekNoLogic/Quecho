@@ -10,6 +10,7 @@
 ## X-LoadOn-Group: true
 
 externals\events.lua
+externals\print.lua
 externals\wod.lua
 
 QIDmemo.lua
