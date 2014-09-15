@@ -10,7 +10,11 @@ end})
 
 
 local f = CreateFrame("Frame")
-f:SetScript("OnEvent", function(frame, event, ...) if Quecho[event] then return Quecho[event](Quecho, event, ...) end end)
+f:SetScript("OnEvent", function(frame, event, ...)
+	if Quecho[event] then
+		return Quecho[event](Quecho, event, ...)
+	end 
+end)
 f:RegisterEvent("ADDON_LOADED")
 
 
@@ -70,7 +74,11 @@ end
 ------------------------------
 
 function Quecho:UI_INFO_MESSAGE(event, msg)
-	if not msg or not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then return end
+	if not msg then return end
+	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
+		return
+	end
+
 	SendAddonMessage("Quecho", msg, "PARTY")
 end
 
@@ -117,8 +125,14 @@ function Quecho:QUEST_LOG_UPDATE()
 		return
 	end
 
-	for id,link in pairs(oldquests) do if not currentquests[id] then SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY") end end
-	for id,link in pairs(currentquests) do if not oldquests[id] then SendAddonMessage("Quecho3", link, "PARTY") end end
+	for id,link in pairs(oldquests) do
+		if not currentquests[id] then
+			SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY")
+		end
+	end
+	for id,link in pairs(currentquests) do
+		if not oldquests[id] then SendAddonMessage("Quecho3", link, "PARTY") end
+	end
 
 	abandoning = nil
 end
