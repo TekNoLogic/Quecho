@@ -13,7 +13,7 @@ local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function(frame, event, ...)
 	if Quecho[event] then
 		return Quecho[event](Quecho, event, ...)
-	end 
+	end
 end)
 f:RegisterEvent("ADDON_LOADED")
 
@@ -62,7 +62,8 @@ local function OnUpdate(f)
 			end
 		end
 
-		WatchFrame_Update()
+		if ns.isWOD then Quecho.Update()
+		else WatchFrame_Update() end
 		if not next2 then f:SetScript("OnUpdate", nil) end
 		nextpurge = next2
 	end
