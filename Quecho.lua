@@ -10,30 +10,19 @@ end})
 
 
 local f = CreateFrame("Frame")
-f:SetScript("OnEvent", function(frame, event, ...)
-	if ns[event] then
-		return ns[event](ns, event, ...)
-	end
-end)
-f:RegisterEvent("ADDON_LOADED")
 
 
-function ns:ADDON_LOADED(event, addon)
-	if addon ~= myname then return end
-
-	self:QUEST_LOG_UPDATE()
+function ns.OnLoad()
+	ns.QUEST_LOG_UPDATE()
 
 	RegisterAddonMessagePrefix("Quecho")
 	RegisterAddonMessagePrefix("Quecho2")
 	RegisterAddonMessagePrefix("Quecho3")
 	RegisterAddonMessagePrefix("Quecho4")
 
-	f:RegisterEvent("UI_INFO_MESSAGE")
-	f:RegisterEvent("CHAT_MSG_ADDON")
-	f:RegisterEvent("QUEST_LOG_UPDATE")
-
-	f:UnregisterEvent("ADDON_LOADED")
-	self.ADDON_LOADED = nil
+	ns.RegisterEvent("UI_INFO_MESSAGE")
+	ns.RegisterEvent("CHAT_MSG_ADDON")
+	ns.RegisterEvent("QUEST_LOG_UPDATE")
 end
 
 
@@ -74,7 +63,7 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function ns:UI_INFO_MESSAGE(event, msg)
+function ns.UI_INFO_MESSAGE(event, msg)
 	if not msg then return end
 	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
 		return
@@ -85,7 +74,7 @@ end
 
 
 local myname = UnitName("player")
-function ns:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
+function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if sender == myname then return end
 
 	if prefix == "Quecho" then
@@ -96,7 +85,7 @@ function ns:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 			nextpurge = GetTime()
 			f:SetScript("OnUpdate", OnUpdate)
 		end
-		self.quests[sender][objective] = progress
+		ns.quests[sender][objective] = progress
 
 		if ns.isWOD then ns.Update()
 		else WatchFrame_Update() end
@@ -108,7 +97,7 @@ end
 
 
 local currentquests, oldquests, firstscan, abandoning = {}, {}, true
-function ns:QUEST_LOG_UPDATE()
+function ns.QUEST_LOG_UPDATE()
 	currentquests, oldquests = oldquests, currentquests
 	wipe(currentquests)
 
@@ -118,7 +107,7 @@ function ns:QUEST_LOG_UPDATE()
 		local link = GetQuestLink(i)
 		if link then
 			count = count + 1
-			currentquests[self.qids[link]] = link
+			currentquests[ns.qids[link]] = link
 		end
 	end
 
@@ -149,6 +138,6 @@ end
 
 -- /run LoadAddOn("Quecho"); Quecho_DebugComm()
 -- function Quecho_DebugComm()
--- 	ns:CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
--- 	ns:CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
+-- 	ns.CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
+-- 	ns.CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
 -- end

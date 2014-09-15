@@ -9,6 +9,7 @@
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Group: true
 
+externals\events.lua
 externals\wod.lua
 
 QIDmemo.lua
