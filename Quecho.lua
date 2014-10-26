@@ -64,7 +64,7 @@ function ns.UI_INFO_MESSAGE(event, msg)
 end
 
 
-local myname = UnitName("player")
+local myname = UnitName("player").. "-".. GetRealmName()
 function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if sender == myname then return end
 
