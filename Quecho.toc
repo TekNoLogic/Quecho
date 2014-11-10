@@ -3,7 +3,7 @@
 ## Title: Quecho
 ## Notes: Echos quest objective completion to your party
 ## Author: Tekkub Stoutwrithe
-## Version: Alpha
+## Version: 6.0.0.13
 ## X-Category: Quest
 
 ## LoadManagers: AddonLoader
