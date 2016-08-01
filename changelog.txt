@@ -1,3 +1,7 @@
+### 7.0.0.15-Beta
+
+* Bump for botched release to WoWI
+
 ### 7.0.0.14-Beta
 
 * Attempt to track progressbar quests
