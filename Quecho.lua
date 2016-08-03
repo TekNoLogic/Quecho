@@ -54,7 +54,7 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function ns.UI_INFO_MESSAGE(event, msg)
+function ns.UI_INFO_MESSAGE(event, msgtype, msg)
 	if not msg then return end
 	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
 		return
