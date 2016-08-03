@@ -100,7 +100,9 @@ function ns.QUEST_LOG_UPDATE()
 			count = count + 1
 			local id = ns.qids[link]
 			currentquests[id] = link
-			if ns.ProgressbarQuests[id] then progressbars[id] = true end
+			if ns.ProgressbarQuests[id] then
+				progressbars[id] = GetQuestObjectiveInfo(id, 1, false)
+			end
 		end
 	end
 
@@ -112,18 +114,22 @@ function ns.QUEST_LOG_UPDATE()
 	for id,link in pairs(oldquests) do
 		if not currentquests[id] then
 			SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY")
-			progressbars[id] = nil
+			if progressbars[id] then
+				SendAddonMessage("Quecho", progressbars[id].. ": 100%", "PARTY")
+				progressbars[id] = nil
+			end
 		end
 	end
 	for id,link in pairs(currentquests) do
 		if not oldquests[id] then
 			SendAddonMessage("Quecho3", link, "PARTY")
-			if ns.ProgressbarQuests[id] then progressbars[id] = true end
+			if ns.ProgressbarQuests[id] then
+				progressbars[id] = GetQuestObjectiveInfo(id, 1, false)
+			end
 		end
 	end
 
-	for id in pairs(progressbars) do
-		local name = GetQuestObjectiveInfo(id, 1, false)
+	for id,name in pairs(progressbars) do
 		local msg = string.format("%s: %.1f%%", name, GetQuestProgressBarPercent(id))
 		SendAddonMessage("Quecho", msg, "PARTY")
 	end
