@@ -1,3 +1,9 @@
+### 7.0.0.16-Beta
+
+* Send a 100% done message when bonus obj is completed
+* Fix a regression
+
+
 ### 7.0.0.15-Beta
 
 * Bump for botched release to WoWI
