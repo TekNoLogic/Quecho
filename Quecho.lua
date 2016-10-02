@@ -45,8 +45,7 @@ local function ExpireObjectives()
 		end
 	end
 
-	if ns.isWOD and dirty then ns.Update()
-	elseif dirty then WatchFrame_Update() end
+	if dirty then ns.Update() end
 end
 
 
@@ -77,8 +76,7 @@ function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 
 		ns.quests[sender][objective] = progress
 
-		if ns.isWOD then ns.Update()
-		else WatchFrame_Update() end
+		ns.Update()
 
 	elseif prefix == "Quecho2" then ns.Printf("%s turned in %s ", sender, msg)
 	elseif prefix == "Quecho3" then ns.Printf("%s accepted %s ", sender, msg)
@@ -145,8 +143,10 @@ function AbandonQuest(...)
 end
 
 
--- /run LoadAddOn("Quecho"); Quecho_DebugComm()
 -- function Quecho_DebugComm()
 -- 	ns.CHAT_MSG_ADDON("", "Quecho", "Something: 1/12", "", "Joe")
 -- 	ns.CHAT_MSG_ADDON("", "Quecho", "Something: 2/12", "", "Bob")
 -- end
+
+--[[
+/run LoadAddOn("Quecho"); Quecho_DebugComm() --]]

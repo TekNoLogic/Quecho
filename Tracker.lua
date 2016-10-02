@@ -49,24 +49,20 @@ local function AddQuests(lineFrame, nextAnchor, maxHeight, frameWidth)
 	return lastLine or nextAnchor, maxWidth, numQuestWatches, 0
 end
 
-if ns.isWOD then
-	local function GetAnchor()
-		local block = BONUS_OBJECTIVE_TRACKER_MODULE.lastBlock
-		if block and block:IsShown() then return block end
+local function GetAnchor()
+	local block = BONUS_OBJECTIVE_TRACKER_MODULE.lastBlock
+	if block and block:IsShown() then return block end
 
-		block = AUTO_QUEST_POPUP_TRACKER_MODULE.lastBlock
-		if block and block:IsShown() then return block end
+	block = AUTO_QUEST_POPUP_TRACKER_MODULE.lastBlock
+	if block and block:IsShown() then return block end
 
-		return QUEST_TRACKER_MODULE.lastBlock
-	end
+	return QUEST_TRACKER_MODULE.lastBlock
+end
 
 
-	function ns.Update()
-		local anchor = GetAnchor()
-		AddQuests(f)
-		f:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -10)
-		f:SetPoint("TOPRIGHT", anchor, "BOTTOMRIGHT", 0, -10)
-	end
-else
-	WatchFrame_AddObjectiveHandler(AddQuests)
+function ns.Update()
+	local anchor = GetAnchor()
+	AddQuests(f)
+	f:SetPoint("TOPLEFT", anchor, "TOPLEFT", 0, 10)
+	f:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", 0, -10)
 end
