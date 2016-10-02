@@ -61,8 +61,9 @@ end
 
 
 function ns.Update()
-	local anchor = GetAnchor()
+	local anchor = ObjectiveTrackerFrame.BlocksFrame
+	local yoffset = -1 * anchor.contentsHeight
 	AddQuests(f)
-	f:SetPoint("TOPLEFT", anchor, "TOPLEFT", 0, 10)
-	f:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", 0, -10)
+	f:SetPoint("TOPLEFT", anchor, 0, yoffset - 10)
+	f:SetPoint("RIGHT", anchor, "RIGHT", 0, -10)
 end
