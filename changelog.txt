@@ -1,3 +1,8 @@
+### 7.0.0.17-Beta
+
+* Fix that terrible fucking overlap
+
+
 ### 7.0.0.16-Beta
 
 * Send a 100% done message when bonus obj is completed
