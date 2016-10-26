@@ -1,3 +1,8 @@
+### 7.1.0.18-Beta
+
+* Change how we scan for current quests (fixes crash in 7.1 (thanks blizzy))
+
+
 ### 7.0.0.17-Beta
 
 * Fix that terrible fucking overlap
