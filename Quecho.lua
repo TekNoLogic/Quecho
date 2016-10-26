@@ -90,16 +90,15 @@ function ns.QUEST_LOG_UPDATE()
 	currentquests, oldquests = oldquests, currentquests
 	wipe(currentquests)
 
-	local i, count, _, total = 0, 0, GetNumQuestLogEntries()
-	while count < total do
-		i = i + 1
-		local link = GetQuestLink(i)
+	local i, count = 0, 0
+	local _, total = GetNumQuestLogEntries()
+	for i=1,GetNumQuestLogEntries() do
+		local _, _, _, _, _, _, _, quest_id = GetQuestLogTitle(i)
+		local link = quest_id and GetQuestLink(quest_id)
 		if link then
-			count = count + 1
-			local id = ns.qids[link]
-			currentquests[id] = link
-			if ns.ProgressbarQuests[id] then
-				progressbars[id] = GetQuestObjectiveInfo(id, 1, false)
+			currentquests[quest_id] = link
+			if ns.ProgressbarQuests[quest_id] then
+				progressbars[quest_id] = GetQuestObjectiveInfo(quest_id, 1, false)
 			end
 		end
 	end
