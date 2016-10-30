@@ -87,8 +87,11 @@ end
 local currentquests, oldquests, firstscan, abandoning = {}, {}, true
 local progressbars = {}
 function ns.QUEST_LOG_UPDATE()
-	currentquests, oldquests = oldquests, currentquests
-	wipe(currentquests)
+	-- Don't swap if we don't have any data in the last scan
+	if next(currentquests) then
+		currentquests, oldquests = oldquests, currentquests
+		wipe(currentquests)
+	end
 
 	local i, count = 0, 0
 	local _, total = GetNumQuestLogEntries()
@@ -107,6 +110,9 @@ function ns.QUEST_LOG_UPDATE()
 		firstscan = nil
 		return
 	end
+
+	-- If our scan was empty, don't announce changes
+	if not next(currentquests) then return end
 
 	for id,link in pairs(oldquests) do
 		if not currentquests[id] then
