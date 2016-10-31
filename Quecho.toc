@@ -16,6 +16,8 @@ externals\memoizing_table.lua
 externals\print.lua
 externals\timer.lua
 
+services\log_scanner.lua
+
 ProgressbarQuests.lua
 QIDmemo.lua
 
