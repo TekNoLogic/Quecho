@@ -20,6 +20,7 @@ services\log_scanner.lua
 services\log_update_proxy.lua
 services\outbound_comms.lua
 services\progess_bar_quests.lua
+services\ui_info_listener.lua
 
 
 Quecho.lua

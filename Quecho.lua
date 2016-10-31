@@ -18,7 +18,6 @@ local function OnLoad()
 	RegisterAddonMessagePrefix("Quecho3")
 	RegisterAddonMessagePrefix("Quecho4")
 
-	ns.RegisterCallback("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
 	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
 end
 ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
@@ -50,16 +49,6 @@ end
 ------------------------------
 --      Event Handlers      --
 ------------------------------
-
-function ns.UI_INFO_MESSAGE(self, event, msgtype, msg)
-	if not msg then return end
-	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
-		return
-	end
-
-	SendAddonMessage("Quecho", msg, "PARTY")
-end
-
 
 local myname = UnitName("player").. "-".. GetRealmName():gsub(" ", "")
 function ns.CHAT_MSG_ADDON(self, event, prefix, msg, channel, sender)
