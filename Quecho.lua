@@ -22,7 +22,15 @@ local function OnLoad()
 
 	ns.RegisterCallback("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
 	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
-	ns.RegisterCallback("QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
+
+	local C = {}
+	ns.RegisterCallback(C, "QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
+	ns.RegisterCallback(C, "PLAYER_ENTERING_WORLD", function(self)
+		ns.RegisterCallback(self, "QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
+	end)
+	ns.RegisterCallback(C, "PLAYER_LEAVING_WORLD", function(self)
+		ns.UnregisterCallback(self, "QUEST_LOG_UPDATE")
+	end)
 end
 ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
 
