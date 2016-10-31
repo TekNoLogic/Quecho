@@ -13,8 +13,6 @@ local f = CreateFrame("Frame")
 
 
 local function OnLoad()
-	ns.QUEST_LOG_UPDATE()
-
 	RegisterAddonMessagePrefix("Quecho")
 	RegisterAddonMessagePrefix("Quecho2")
 	RegisterAddonMessagePrefix("Quecho3")
@@ -22,7 +20,6 @@ local function OnLoad()
 
 	ns.RegisterCallback("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
 	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
-	ns.RegisterCallback("_QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
 end
 ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
 
@@ -82,35 +79,6 @@ function ns.CHAT_MSG_ADDON(self, event, prefix, msg, channel, sender)
 	elseif prefix == "Quecho2" then ns.Printf("%s turned in %s ", sender, msg)
 	elseif prefix == "Quecho3" then ns.Printf("%s accepted %s ", sender, msg)
 	elseif prefix == "Quecho4" then ns.Printf("%s abandoned %s ", sender, msg) end
-end
-
-
-local currentquests, oldquests, firstscan, abandoning = {}, {}, true
-function ns.QUEST_LOG_UPDATE()
-	-- Don't swap if we don't have any data in the last scan
-	if next(currentquests) then
-		currentquests, oldquests = oldquests, currentquests
-		wipe(currentquests)
-	end
-
-	ns.ScanLog(currentquests)
-
-	if firstscan then
-		firstscan = nil
-		return
-	end
-
-
-	ns.Diff(currentquests, oldquests, abandoning)
-
-	abandoning = nil
-end
-
-
-local orig = AbandonQuest
-function AbandonQuest(...)
-	abandoning = true
-	return orig(...)
 end
 
 

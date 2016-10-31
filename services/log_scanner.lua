@@ -2,7 +2,10 @@
 local myname, ns = ...
 
 
-function ns.Diff(current, previous, abandon_in_progress)
+local abandon_in_progress
+
+
+local function Diff(current, previous)
 	-- If we don't have full data, don't do anything
 	if not next(current) or not next(previous) then return end
 
@@ -42,11 +45,43 @@ local function GetQuestInfo(index)
 end
 
 
-function ns.ScanLog(quests)
+local function ScanLog(quests)
 	for i=1,GetNumQuestLogEntries() do
 		local quest_id, detail = GetQuestInfo(i)
 		if quest_id then quests[quest_id] = detail end
 	end
-
-	return quests
 end
+
+
+local currentquests, oldquests = {}, {}
+local function OnQuestLogUpdate()
+	-- Don't swap if we don't have any data in the last scan
+	if next(currentquests) then
+		currentquests, oldquests = oldquests, currentquests
+		wipe(currentquests)
+	else
+		print("Skipping swap")
+	end
+
+	ScanLog(currentquests)
+
+	if not next(currentquests) then print("Empty scan, wtf?") end
+
+	Diff(currentquests, oldquests)
+
+	abandon_in_progress = nil
+end
+
+
+local orig = AbandonQuest
+function AbandonQuest(...)
+	abandon_in_progress = true
+	return orig(...)
+end
+
+
+local function OnLoad()
+	ScanLog(currentquests)
+	ns.RegisterCallback("_QUEST_LOG_UPDATE", OnQuestLogUpdate)
+end
+ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
