@@ -17,9 +17,13 @@ externals\print.lua
 externals\timer.lua
 
 services\log_scanner.lua
+services\outbound_comms.lua
+services\progess_bar_quests.lua
 
 ProgressbarQuests.lua
 QIDmemo.lua
 
 Quecho.lua
 Tracker.lua
+
+init.lua

@@ -2,6 +2,28 @@
 local myname, ns = ...
 
 
+function ns.Diff(current, previous, abandon_in_progress)
+	-- If we don't have full data, don't do anything
+	if not next(current) or not next(previous) then return end
+
+	for id,link in pairs(previous) do
+		if not current[id] then
+			if abandon_in_progress then
+				ns.SendMessage("_QUEST_ABANDONED", id, link)
+			else
+				ns.SendMessage("_QUEST_TURNED_IN", id, link)
+			end
+		end
+	end
+
+	for id,link in pairs(current) do
+		if not previous[id] then
+			ns.SendMessage("_QUEST_ACCEPTED", id, link)
+		end
+	end
+end
+
+
 local function GetQuestInfo(index)
 	local title, _, _, is_header, _, _, _, quest_id = GetQuestLogTitle(index)
 	if is_header then return end

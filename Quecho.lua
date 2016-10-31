@@ -22,15 +22,7 @@ local function OnLoad()
 
 	ns.RegisterCallback("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
 	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
-
-	local C = {}
-	ns.RegisterCallback(C, "QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
-	ns.RegisterCallback(C, "PLAYER_ENTERING_WORLD", function(self)
-		ns.RegisterCallback(self, "QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
-	end)
-	ns.RegisterCallback(C, "PLAYER_LEAVING_WORLD", function(self)
-		ns.UnregisterCallback(self, "QUEST_LOG_UPDATE")
-	end)
+	ns.RegisterCallback("_QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
 end
 ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
 
@@ -94,7 +86,6 @@ end
 
 
 local currentquests, oldquests, firstscan, abandoning = {}, {}, true
-local progressbars = {}
 function ns.QUEST_LOG_UPDATE()
 	-- Don't swap if we don't have any data in the last scan
 	if next(currentquests) then
@@ -104,42 +95,13 @@ function ns.QUEST_LOG_UPDATE()
 
 	ns.ScanLog(currentquests)
 
-	for quest_id in pairs(currentquests) do
-		if ns.ProgressbarQuests[quest_id] then
-			progressbars[quest_id] = GetQuestObjectiveInfo(quest_id, 1, false)
-		end
-	end
-
 	if firstscan then
 		firstscan = nil
 		return
 	end
 
-	-- If our scan was empty, don't announce changes
-	if not next(currentquests) then return end
 
-	for id,link in pairs(oldquests) do
-		if not currentquests[id] then
-			SendAddonMessage(abandoning and "Quecho4" or "Quecho2", link, "PARTY")
-			if progressbars[id] then
-				SendAddonMessage("Quecho", progressbars[id].. ": 100%", "PARTY")
-				progressbars[id] = nil
-			end
-		end
-	end
-	for id,link in pairs(currentquests) do
-		if not oldquests[id] then
-			SendAddonMessage("Quecho3", link, "PARTY")
-			if ns.ProgressbarQuests[id] then
-				progressbars[id] = GetQuestObjectiveInfo(id, 1, false)
-			end
-		end
-	end
-
-	for id,name in pairs(progressbars) do
-		local msg = string.format("%s: %.1f%%", name, GetQuestProgressBarPercent(id))
-		SendAddonMessage("Quecho", msg, "PARTY")
-	end
+	ns.Diff(currentquests, oldquests, abandoning)
 
 	abandoning = nil
 end
