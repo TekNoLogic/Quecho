@@ -3,10 +3,21 @@ local myname, ns = ...
 
 
 local quests = {}
+local progressive_quests = ns.NewMemoizingTable(function(quest_id)
+	local _, _, num_objectives = GetTaskInfo(quest_id)
+	if not num_objectives then return end
+
+	for i=1,num_objectives do
+		local _, objective_type = GetQuestObjectiveInfo(quest_id, i, false)
+		if objective_type == "progressbar" then return true end
+	end
+
+	return false
+end)
 
 
 local function AddQuest(self, message, quest_id)
-	if not ns.ProgressbarQuests[quest_id] then return end
+	if not progressive_quests[quest_id] then return end
 
 	quests[quest_id] = GetQuestObjectiveInfo(quest_id, 1, false)
 end
