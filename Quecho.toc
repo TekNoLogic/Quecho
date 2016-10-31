@@ -5,9 +5,12 @@
 ## Author: Tekkub Stoutwrithe
 ## X-Category: Quest
 
+## OptionalDeps: tekDebug
+
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Group: true
 
+externals\debug.lua
 externals\events.lua
 externals\print.lua
 externals\timer.lua
