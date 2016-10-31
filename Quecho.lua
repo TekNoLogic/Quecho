@@ -12,7 +12,7 @@ end})
 local f = CreateFrame("Frame")
 
 
-function ns.OnLoad()
+local function OnLoad()
 	ns.QUEST_LOG_UPDATE()
 
 	RegisterAddonMessagePrefix("Quecho")
@@ -20,10 +20,11 @@ function ns.OnLoad()
 	RegisterAddonMessagePrefix("Quecho3")
 	RegisterAddonMessagePrefix("Quecho4")
 
-	ns.RegisterEvent("UI_INFO_MESSAGE")
-	ns.RegisterEvent("CHAT_MSG_ADDON")
-	ns.RegisterEvent("QUEST_LOG_UPDATE")
+	ns.RegisterEvent("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
+	ns.RegisterEvent("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
+	ns.RegisterEvent("QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
 end
+ns.RegisterEvent("_THIS_ADDON_LOADED", OnLoad)
 
 
 ---------------------------
@@ -53,7 +54,7 @@ end
 --      Event Handlers      --
 ------------------------------
 
-function ns.UI_INFO_MESSAGE(event, msgtype, msg)
+function ns.UI_INFO_MESSAGE(self, event, msgtype, msg)
 	if not msg then return end
 	if not (msg:find("(.+) %(Complete%)") or msg:find("(.+): (%d+/%d+)")) then
 		return
@@ -64,7 +65,7 @@ end
 
 
 local myname = UnitName("player").. "-".. GetRealmName():gsub(" ", "")
-function ns.CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
+function ns.CHAT_MSG_ADDON(self, event, prefix, msg, channel, sender)
 	if sender == myname then return end
 
 	if prefix == "Quecho" then
