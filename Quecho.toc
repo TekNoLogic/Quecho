@@ -12,6 +12,7 @@
 
 externals\debug.lua
 externals\events.lua
+externals\memoizing_table.lua
 externals\print.lua
 externals\timer.lua
 

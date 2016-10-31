@@ -1,4 +1,5 @@
 debug.lua
 events.lua
+memoizing_table.lua
 print.lua
 timer.lua

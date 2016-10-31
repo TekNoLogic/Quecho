@@ -2,24 +2,17 @@
 local myname, ns = ...
 
 
-local function IsProgressive(questID)
-	local _, _, numObjectives, taskName, displayAsObjective = GetTaskInfo(questID)
+local function IsProgressive(quest_id)
+	local _, _, num_objectives = GetTaskInfo(quest_id)
+	if not num_objectives then return end
 
-	if not numObjectives then return end
-
-	for i=1,numObjectives do
-		local _, objectiveType = GetQuestObjectiveInfo(questID, i, false)
-		if objectiveType == "progressbar" then return true end
+	for i=1,num_objectives do
+		local _, objective_type = GetQuestObjectiveInfo(quest_id, i, false)
+		if objective_type == "progressbar" then return true end
 	end
 
 	return false
 end
 
 
-ns.ProgressbarQuests = setmetatable({}, {
-	__index = function(t,i)
-		local v = IsProgressive(i)
-		t[i] = v
-		return v
-	end,
-})
+ns.ProgressbarQuests = ns.NewMemoizingTable(IsProgressive)
