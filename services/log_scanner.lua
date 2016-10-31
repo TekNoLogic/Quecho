@@ -3,7 +3,7 @@ local myname, ns = ...
 
 
 local function GetQuestInfo(index)
-	local title, _, _, is_header, _, _, _, quest_id = GetQuestLogTitle(i)
+	local title, _, _, is_header, _, _, _, quest_id = GetQuestLogTitle(index)
 	if is_header then return end
 
 	assert(quest_id, "No quest ID found for item at index ".. index)
@@ -18,6 +18,7 @@ local function GetQuestInfo(index)
 		return quest_id, title
 	end
 end
+
 
 function ns.ScanLog(quests)
 	for i=1,GetNumQuestLogEntries() do

@@ -20,11 +20,11 @@ local function OnLoad()
 	RegisterAddonMessagePrefix("Quecho3")
 	RegisterAddonMessagePrefix("Quecho4")
 
-	ns.RegisterEvent("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
-	ns.RegisterEvent("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
-	ns.RegisterEvent("QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
+	ns.RegisterCallback("UI_INFO_MESSAGE", ns.UI_INFO_MESSAGE)
+	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
+	ns.RegisterCallback("QUEST_LOG_UPDATE", ns.QUEST_LOG_UPDATE)
 end
-ns.RegisterEvent("_THIS_ADDON_LOADED", OnLoad)
+ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
 
 
 ---------------------------
