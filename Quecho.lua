@@ -9,20 +9,6 @@ ns.quests = setmetatable({}, {__index = function (t,i)
 end})
 
 
-local f = CreateFrame("Frame")
-
-
-local function OnLoad()
-	RegisterAddonMessagePrefix("Quecho")
-	RegisterAddonMessagePrefix("Quecho2")
-	RegisterAddonMessagePrefix("Quecho3")
-	RegisterAddonMessagePrefix("Quecho4")
-
-	ns.RegisterCallback("CHAT_MSG_ADDON", ns.CHAT_MSG_ADDON)
-end
-ns.RegisterCallback("_THIS_ADDON_LOADED", OnLoad)
-
-
 ---------------------------
 --      Reset timer      --
 ---------------------------
@@ -50,25 +36,16 @@ end
 --      Event Handlers      --
 ------------------------------
 
-local myname = UnitName("player").. "-".. GetRealmName():gsub(" ", "")
-function ns.CHAT_MSG_ADDON(self, event, prefix, msg, channel, sender)
-	if sender == myname then return end
+function OnPartyProgress(self, message, sender, objective, progress)
+	local now = GetTime()
+	sendtimes[sender..objective] = now
+	ns.StartTimer(now + DELAY + 0.1, ExpireObjectives)
 
-	if prefix == "Quecho" then
-		local _, _, objective, progress = msg:find("([^:]+):? %(?([^)]+)%)?")
+	ns.quests[sender][objective] = progress
 
-		local now = GetTime()
-		sendtimes[sender..objective] = now
-		ns.StartTimer(now + DELAY + 0.1, ExpireObjectives)
-
-		ns.quests[sender][objective] = progress
-
-		ns.Update()
-
-	elseif prefix == "Quecho2" then ns.Printf("%s turned in %s ", sender, msg)
-	elseif prefix == "Quecho3" then ns.Printf("%s accepted %s ", sender, msg)
-	elseif prefix == "Quecho4" then ns.Printf("%s abandoned %s ", sender, msg) end
+	ns.Update()
 end
+ns.RegisterCallback("_PARTY_PROGRESS", OnPartyProgress)
 
 
 -- function Quecho_DebugComm()
