@@ -6,6 +6,9 @@ local WATCHFRAME_INITIAL_OFFSET = WATCHFRAME_INITIAL_OFFSET or 0
 local WATCHFRAME_TYPE_OFFSET = WATCHFRAME_TYPE_OFFSET or 10
 
 
+local quests = ns.NewMemoizingTable(function() return {} end)
+
+
 local f = CreateFrame("Frame", nil, UIParent)
 f:SetWidth(1) f:SetHeight(1)
 local lines = setmetatable({}, {__index = function(t, i)
@@ -37,7 +40,7 @@ local function AddQuests(lineFrame, nextAnchor, maxHeight, frameWidth)
 	current = 0
 	for _,fs in ipairs(lines) do fs:SetText() end
 
-	for sender,values in pairs(ns.quests) do
+	for sender,values in pairs(quests) do
 		if next(values) then
 			maxWidth, lastLine, numQuestWatches = AddLine(sender, maxWidth, lineFrame, lastLine or nextAnchor, true, numQuestWatches)
 			for i,v in pairs(values) do
@@ -48,6 +51,7 @@ local function AddQuests(lineFrame, nextAnchor, maxHeight, frameWidth)
 
 	return lastLine or nextAnchor, maxWidth, numQuestWatches, 0
 end
+
 
 local function GetAnchor()
 	local block = BONUS_OBJECTIVE_TRACKER_MODULE.lastBlock
@@ -60,10 +64,26 @@ local function GetAnchor()
 end
 
 
-function ns.Update()
+local function Update()
 	local anchor = ObjectiveTrackerFrame.BlocksFrame
 	local yoffset = -1 * anchor.contentsHeight
 	AddQuests(f)
 	f:SetPoint("TOPLEFT", anchor, 0, yoffset - 10)
 	f:SetPoint("RIGHT", anchor, "RIGHT", 0, -10)
 end
+
+
+local function OnPartyExpire(self, message, sender, objective)
+	quests[sender][objective] = nil
+	Update()
+end
+
+
+function OnPartyProgress(self, message, sender, objective, progress)
+	quests[sender][objective] = progress
+	Update()
+end
+
+
+ns.RegisterCallback("_PARTY_EXPIRE", OnPartyExpire)
+ns.RegisterCallback("_PARTY_PROGRESS", OnPartyProgress)
