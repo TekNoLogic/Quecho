@@ -55,7 +55,8 @@ function ns.SendMessage(message, ...)
 	if not callbacks[message] then return end
 
 	for context,func in pairs(callbacks[message]) do
-		func(context, message, ...)
+		local success, error = pcall(func, context, message, ...)
+		if not success then geterrorhandler()(error) end
 	end
 end
 
