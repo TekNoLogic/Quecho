@@ -17,14 +17,14 @@ externals\print.lua
 
 constants.lua
 
+frames\objective.lua
+
 services\inbound_comms.lua
 services\log_scanner.lua
 services\log_update_proxy.lua
 services\objective_expiration.lua
 services\outbound_comms.lua
 services\party_printout.lua
+services\party_tracker.lua
 services\progess_bar_quests.lua
 services\ui_info_listener.lua
-
-
-Tracker.lua
