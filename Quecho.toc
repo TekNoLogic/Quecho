@@ -27,4 +27,5 @@ services\outbound_comms.lua
 services\party_printout.lua
 services\party_tracker.lua
 services\progess_bar_quests.lua
+services\testing.lua
 services\ui_info_listener.lua
