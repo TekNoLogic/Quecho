@@ -15,7 +15,7 @@ end
 
 
 local function GetUnusedLine()
-	for line in pairs[lines] do
+	for line in pairs(lines) do
 		if not line:IsShown() then
 			line:Show()
 			return line
