@@ -14,9 +14,9 @@ local function AddLine(text, anchor, header)
 	line:SetText(text)
 
 	if header then
-		line:SetTextColor(0.7, 0.7, 0.9)
-	else
 		line:SetTextColor(0.75, 0.61, 0)
+	else
+		line:SetTextColor(0.7, 0.7, 0.9)
 	end
 
 	if anchor then
