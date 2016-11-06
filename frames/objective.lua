@@ -46,8 +46,8 @@ end
 
 
 function ns.AnchorLines(anchor)
-	local anchor = ObjectiveTrackerFrame.BlocksFrame
-	local yoffset = -1 * anchor.contentsHeight
+	local anchor = GetAnchor()
+	local yoffset = -1 * anchor.module.contentsHeight
 	parent:SetPoint("TOPLEFT", anchor, 0, yoffset - 10)
 	parent:SetPoint("RIGHT", anchor, "RIGHT", 0, -10)
 end
