@@ -32,10 +32,10 @@ end
 
 
 local function OnQuestTurnedIn(self, message, quest_id)
-	if not quests[id] then return end
+	if not quests[quest_id] then return end
 
-	ns.SendMessage("_QUEST_PROGRESS", quests[id].. ": 100%")
-	quests[id] = nil
+	ns.SendMessage("_QUEST_PROGRESS", quests[quest_id].. ": 100%")
+	quests[quest_id] = nil
 end
 
 
