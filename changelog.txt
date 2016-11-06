@@ -1,3 +1,9 @@
+### 7.1.0.19-Beta
+
+* Fix announce of all quests gained/lost during zoning
+* Fix overlap really this time I swear
+
+
 ### 7.1.0.18-Beta
 
 * Change how we scan for current quests (fixes crash in 7.1 (thanks blizzy))
