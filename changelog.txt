@@ -1,3 +1,8 @@
+### 7.1.0.20-Beta
+
+* Did I say I finally fixed that? HA! .... now I did.  Seriously.  Guys?  HELLO?
+
+
 ### 7.1.0.19-Beta
 
 * Fix announce of all quests gained/lost during zoning
