@@ -35,19 +35,21 @@ end
 
 
 local function GetAnchor()
-	local block = BONUS_OBJECTIVE_TRACKER_MODULE.lastBlock
-	if block and block:IsShown() then return block end
-
-	block = AUTO_QUEST_POPUP_TRACKER_MODULE.lastBlock
-	if block and block:IsShown() then return block end
-
-	return QUEST_TRACKER_MODULE.lastBlock
+	local best_bottom = math.huge
+	local best_anchor
+	for i,module in pairs(ObjectiveTrackerFrame.MODULES) do
+		local block = module.lastBlock
+		local bottom = block and block:IsVisible() and block:GetBottom()
+		if bottom and bottom < best_bottom then
+			best_anchor, best_bottom = block, bottom
+		end
+	end
+	return best_anchor
 end
 
 
 function ns.AnchorLines(anchor)
 	local anchor = GetAnchor()
-	local yoffset = -1 * anchor.module.contentsHeight
 	parent:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -10)
 	parent:SetPoint("RIGHT", anchor, "RIGHT", 0, -10)
 end
